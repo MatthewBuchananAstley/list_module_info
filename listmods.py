@@ -1,0 +1,158 @@
+#!/usr/bin/env python3.5
+#
+# God wat een goed leesbaar script is het geworden! Dank U!
+# Vrolijk even consistent spaties gebruikt na wat terechte aanwijzingen van de interpreter.
+# Wat is een systeem nou met veel onnodige modules geladen? 
+# Met tooltjes kijken welke modules er geladen zijn, vrolijk erachterkomen dat er bij een aantal 
+# modules gewoon ook info ontbreekt.
+# Zal wel goed zijn, zo'n module zonder info, of 15 modules voor 1 geluidskaartje.
+# 
+# Ja, Jezus nou je het zegt, heel onduidelijk vind ik de /usr/bin/lsmod output, je ziet wel welke modules
+# geladen zijn, en hun depends, maar voor meer info zal je /sbin/modinfo "module" doen.
+#
+# Nu met dit script zie je meteen owJeetje dat zijn geluidskaart modules die a l l e m a a l geladen moeten zijn.
+# Je kan vaak zonder resultaat rmmodden wal je wil.
+# Modules zijn dan gewoon .. "busy" .. als zij geen depends hebben om naar te wijzen. 
+#
+# Om te zorgen dat modules niet geladen worden tijdens het initiele opstarten heb je de file: 
+# /lib/modprobe.d/dist-blacklist.conf. En sommige modules worden ondanks dat soms toch geladen.
+#
+#       blacklist nederlandse_wet_staat_rootkits_op_werknemers_apparatuur_toe_module 
+#
+# Het duurde weer een paar jaar voordat ik zelf tevreden was, hiervoor heb ik veel in Perl gehannest, 
+# maar nu in python3.5 is het gelukt.
+# 
+# Het begon allemaal met een uit de hand gelopen oneliner:
+# 
+# for i in `lsmod|awk '{print $1}'` ; do echo $i ; /sbin/modinfo $i | egrep '^description|^filename'; done
+# 
+# Maar dan heb je niet al je depends en voor elke depends ook de info op een rijtje. Nu met dit script wel.
+#
+# Usage: ./listmods.py
+#
+# Even voor de duidelijkheid dit is een studie scriptje van mij en vrolijk zien God en Jezus toch alles wat je doet.
+# Dus heel parra hoeft nou ook weer niet. 
+# 
+
+
+import os, sys, re
+import subprocess
+import pathlib
+
+#
+# De functie moet kennelijk bovenaan in python3.5 dus eerst de functie om 
+# de output van modinfo "module" te vangen en dan met een regular expression
+# de "description" en "filename" regel te matchen.
+# Sommige modules hebben geen description regel, waarom dit ontbreekt? 
+# vast veulste druk om even een beschrijvend zinnetje
+# te schrijven voor een module die jarenlang op de achtergrond draait.
+# subprocess.py is de module die je gebruikt om systeem commandos uit te voeren.
+
+def listmodinfo(i):
+   ouput3 = []
+   module2 = i
+   cmd = [ "/usr/sbin/modinfo", module2 ]
+   ouput = subprocess.check_output(cmd)
+   ouput2 = ouput.decode().split("\n")
+
+   pattern1 = re.compile("^description")
+   pattern2 = re.compile("^filename")
+
+#
+# De lege array even eerst declaren in de basis van de functie.
+   
+   result = []
+
+# 
+# De "description" regex match splitten in een eigen array 
+# en de tweede waarde in de array stoppen met de indexnummer.
+# tempin[1]
+
+   for item in ouput2:
+      if pattern1.search(item):
+         tempin = item.split(":")
+         result.append(tempin[1].strip())
+
+#
+# Ho, hier moet ik toch even zeggen dat vrolijk even eenvoudig joinen van
+# elementen van een systeem mappen structuurtje in een array, in python, zo gaat,
+# met liefdevol PurePath uit pathlib. Voorzichtig werkte het bij mij pas nadat ik
+# de hele module pathlib had geimporteerd.
+# 
+
+      if pattern2.search(item):
+         tempin = item.split(":")
+#
+# Whitespace eraf.
+
+         filepath = tempin[1].strip()
+
+#
+# Mapdeeltes van de module file locatie in een array.
+
+         pathparts = []
+         p = pathlib.PurePath(filepath)
+         pathparts = p.parts
+
+#
+# Even range kung fu want p.parts(range(4,len(pathparts))) 
+# gaat anders. Hoe? Zo:
+  
+         lenval = len(pathparts) 
+         p2 = []
+         for i in range(4,lenval):
+             p2.append(pathparts[i]) 
+
+#
+# Deze manier van array values aan elkaar verbinden vind ik echt handig.
+# Vooral gewoon "verbindings waarde".join(array) doen. Top!
+# Vanaf het woord "kernel" totaan het eind van de string is handig.
+# Dit omdat je dan ziet waar de module bijhoort kernel/net als er geen 
+# Description bijstaat.
+
+         p2string = "/".join(p2)
+         result.append(p2string) 
+
+#
+# De waardes in de array omdraaien want de de waardes verschijnen omgekeerd in de array 
+# en de strings returnen.
+
+   result.reverse()
+   p3string = " -> ".join(result)
+   return(module2,"->",p3string)
+
+
+#
+# De file /proc/modules openen en lezen en in procmodules stoppen.
+
+procmodules = open("/proc/modules", 'r') 
+
+#
+# Voor elke regel van de /proc/modules file, doe:
+
+for i in procmodules:
+
+# 
+# Split elk element op de regel aan de hand van de standaard whitespace.
+ 
+   (module,memused,modused,depends,live,pointer) = i.split()
+
+#
+# Run de module op de eerste module en print het resultaat.
+
+   modinf = listmodinfo(module)
+   print(modinf)
+
+#
+# Als de depends geen steepje is split dan de depends op komma,
+# run functie en print dan het resultaat met een beetje whitespace als array veld niet leeg is.
+
+   if depends != '-':
+      inp = depends.split(',')
+      for i in inp:
+         if i != '':
+            resultdep = listmodinfo(i)
+            print("   ",resultdep)
+   
+
+       
