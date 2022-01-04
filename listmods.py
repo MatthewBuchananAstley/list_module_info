@@ -1,4 +1,4 @@
-#!/usr/bin/env python3.5
+#!/usr/bin/env python3
 #
 # God wat een goed leesbaar script is het geworden! Dank U!
 # Vrolijk even consistent spaties gebruikt na wat terechte aanwijzingen van de interpreter.
