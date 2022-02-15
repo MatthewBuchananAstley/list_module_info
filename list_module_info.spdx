@@ -1,0 +1,61 @@
+SPDXVersion: SPDX-2.2
+DataLicense: CC0-1.0
+SPDXID: SPDXRef-DOCUMENT
+DocumentName: list_module_info.spdx
+DocumentNamespace: https://github.com/MatthewBuchananAstley/list_module_info.git
+Creator: Person: Matthew Buchanan Astley (matthewbuchanan@astley.nl)
+Created: 2022-02-15T21:30:39Z
+CreatorComment: list_module_info (version with detailed explanation of code) spdx file
+
+#
+#
+
+PackageName: list_module_info
+SPDXID: SPDXRef-MatthewBuchananAstley-Package-list-module-info
+PackageVersion: 1.0
+PackageVerificationCode: b1db09fb2ebf8316dd409695493921c80412dde2 (./list_module_info.spdx excluded )
+PackageLicenseDeclared: GPL-3.0-or-later
+PackageLicenseInfoFromFiles: LicenseRef-GPL-3.0-or-later
+PackageLicenseConcluded: LicenseRef-GPL-3.0-or-later
+PackageCopyrightText: <text> 2019 - 2022 Matthew Buchanan Astley (matthewbuchanan@astley.nl) </text>
+PackageDownloadLocation: https://github.com/MatthewBuchananAstley/list_module_info.git
+
+#
+#
+#
+
+FileName: ./README.md
+SPDXID: SPDXRef-README.md
+FileType: TEXT
+FileChecksum: SHA256: 2bfeacff26f6b0791a59bbf577b75198e3e951065f00126049f199a8e477d3e7
+FileChecksum: SHA1: c7a51880fe255b5fd6aa325f39359e54cb69a9d6
+FileCopyrightText: <text> 2019 - 2022 Matthew Buchanan Astley (matthewbuchanan@astley.nl) </text>
+LicenseInfoInFile: NOASSERTION
+LicenseConcluded: NOASSERTION
+
+#
+#
+#
+
+FileName: ./CHANGELOG
+SPDXID: SPDXRef-CHANGELOG
+FileType: TEXT
+FileChecksum: SHA256: 69d67fc00e724b5f0f3ea9eece352765ca051909a04e533a901a01257385a18e
+FileChecksum: SHA1: eeabe2414747bad3c3f1ff2bff2df0ceae8a9639
+FileCopyrightText: NOASSERTION
+LicenseInfoInFile: NOASSERTION
+LicenseConcluded: NOASSERTION
+
+#
+#
+#
+
+FileName: ./listmods
+SPDXID: SPDXRef-listmods
+FileType: APPLICATION
+FileChecksum: SHA256: d586f923267da9f44a0ec36fa85379ee229fde40de555372f152af192f3f067d
+FileChecksum: SHA1: b5bdfa2191146635acb1e1310aa254fca51f552d
+FileCopyrightText: <text> 2019 - 2022 Matthew Buchanan Astley (matthewbuchanan@astley.nl) </text>
+LicenseInfoInFile: GPL-3.0-or-later
+LicenseConcluded: GPL-3.0-or-later
+
